@@ -3,9 +3,8 @@
 require 'visit_tracker'
 
 class LogParser
-  def initialize(file_name, visit_tracker = VisitTracker)
+  def initialize(file_name)
     @pages_with_logs = {}
-    @visit_tracker = visit_tracker
     @file = File.expand_path("../../#{file_name}", __FILE__)
     return if file_exists?
 
