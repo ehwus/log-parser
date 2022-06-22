@@ -25,17 +25,18 @@ describe LogParser do
       expect(VisitTracker).to have_received(:new).with('126.318.035.038')
     end
 
-    xit 'Calls log_visit on second visit' do
+    it 'Calls log_visit on second visit' do
       fake_line = '/help_page/1 126.318.035.038'
       parser = LogParser.new('webserver.log')
+      fake_logger = double
 
-      allow(VisitTracker).to receive(:new)
+      allow(VisitTracker).to receive(:new).and_return(fake_logger)
       parser.process_line(fake_line)
 
-      allow(VisitTracker).to receive(:log_visit)
+      allow(fake_logger).to receive(:log_visit)
       parser.process_line(fake_line)
 
-      expect(VisitTracker).to have_received(:log_visit).with('126.318.035.038')
+      expect(fake_logger).to have_received(:log_visit).with('126.318.035.038')
     end
   end
 end

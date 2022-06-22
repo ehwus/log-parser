@@ -18,7 +18,7 @@ class LogParser
     page_log = @pages_with_logs[line_data[:page]]
 
     if page_log.nil?
-      @pages_with_logs.store(line_data[:name], VisitTracker.new(line_data[:ip]))
+      @pages_with_logs.store(line_data[:page], VisitTracker.new(line_data[:ip]))
     else
       page_log.log_visit(line_data[:ip])
     end
