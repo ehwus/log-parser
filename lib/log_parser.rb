@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'visit_tracker'
+require 'log_sorter'
 
 class LogParser
   def initialize(file_name)
@@ -9,6 +10,10 @@ class LogParser
     return if file_exists?
 
     raise 'Invalid file path'
+  end
+
+  def parse
+    File.readlines(@file).each { |line| process_line(line) }
   end
 
   def process_line(line)
@@ -21,6 +26,12 @@ class LogParser
     else
       page_log.log_visit(line_data[:ip])
     end
+  end
+
+  def print_results
+    log_sorter = LogSorter.new(@pages_with_logs)
+    log_sorter.print_views
+    log_sorter.print_unique_views
   end
 
   private

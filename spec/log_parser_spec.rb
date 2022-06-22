@@ -39,4 +39,21 @@ describe LogParser do
       expect(fake_logger).to have_received(:log_visit).with('126.318.035.038')
     end
   end
+
+  describe '.print_results' do
+    it 'Initialises a LogSorter with the pages_with_logs, runs sort then print results' do
+      fake_log_sorter = double
+      allow(fake_log_sorter).to receive(:print_views)
+      allow(fake_log_sorter).to receive(:print_unique_views)
+      allow(LogSorter).to receive(:new).and_return(fake_log_sorter)
+
+      parser = LogParser.new('webserver.log')
+      parser.print_results
+
+      expect(LogSorter).to have_received(:new).with({})
+
+      expect(fake_log_sorter).to have_received(:print_views)
+      expect(fake_log_sorter).to have_received(:print_unique_views)
+    end
+  end
 end
