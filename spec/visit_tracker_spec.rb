@@ -19,4 +19,11 @@ describe VisitTracker do
     expect(url_tracker.count).to be(2)
     expect(url_tracker.unique_count).to be(2)
   end
+
+  it 'logs visit with same IP, increments count to 2 leaving unique count' do
+    url_tracker = VisitTracker.new('1.1.1.1')
+    url_tracker.log_visit('1.1.1.1')
+    expect(url_tracker.count).to be(2)
+    expect(url_tracker.unique_count).to be(1)
+  end
 end
