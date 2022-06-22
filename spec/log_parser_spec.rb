@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/log_parser'
+require 'log_parser'
 
 describe LogParser do
   it 'Throws an error if instantiated without a file path' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/visit_tracker'
+require 'visit_tracker'
 
 describe VisitTracker do
   it 'instantiates with an initial IP' do
