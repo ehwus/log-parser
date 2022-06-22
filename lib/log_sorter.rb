@@ -34,6 +34,6 @@ class LogSorter
   end
 
   def correct_view_plural(number)
-    number < 2 ? "view" : "views"
+    number < 2 ? 'view' : 'views'
   end
 end
