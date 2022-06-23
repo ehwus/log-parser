@@ -20,43 +20,47 @@ describe LogSorter do
     expect(LogSorter.new({ example_page: visit_tracker1 })).to be
   end
 
-  describe '.print_views' do
-    it 'Prints all views in order from the given hash' do
-      log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+  it 'Sorts total views in order from the given hash' do
+    log_sorter = LogSorter.new({ "one": visit_tracker1, "two": visit_tracker2, "three": visit_tracker3 })
+    sorted_list = log_sorter.all_page_views_sorted
 
-      expect { log_sorter.print_views }.to output("three 3 visits\ntwo 2 visits\none 1 visit\n").to_stdout
-    end
-
-    it 'Handles a different, more complex order' do
-      allow(visit_tracker1).to receive(:count).and_return(791)
-      allow(visit_tracker2).to receive(:count).and_return(1999)
-      allow(visit_tracker3).to receive(:count).and_return(42)
-
-      log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
-
-      expect { log_sorter.print_views }.to output("two 1999 visits\none 791 visits\nthree 42 visits\n").to_stdout
-    end
+    expect(sorted_list[0][0]).to eq(:three)
+    expect(sorted_list[1][0]).to eq(:two)
+    expect(sorted_list[2][0]).to eq(:one)
   end
 
-  describe '.print_unique_views' do
-    it 'Prints unique views in order' do
-      log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+  it 'Handles a different, more complex order' do
+    allow(visit_tracker1).to receive(:count).and_return(791)
+    allow(visit_tracker2).to receive(:count).and_return(1999)
+    allow(visit_tracker3).to receive(:count).and_return(42)
 
-      expect do
-        log_sorter.print_unique_views
-      end.to output("three 3 unique views\ntwo 2 unique views\none 1 unique view\n").to_stdout
-    end
+    log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+    sorted_list = log_sorter.all_page_views_sorted
 
-    it 'Handles a slightly more complex case' do
-      allow(visit_tracker1).to receive(:unique_count).and_return(555)
-      allow(visit_tracker2).to receive(:unique_count).and_return(777)
-      allow(visit_tracker3).to receive(:unique_count).and_return(666)
+    expect(sorted_list[0][0]).to eq(:two)
+    expect(sorted_list[1][0]).to eq(:one)
+    expect(sorted_list[2][0]).to eq(:three)
+  end
 
-      log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+  it 'Sorts unique views in order' do
+    log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+    sorted_list = log_sorter.unique_page_views_sorted
 
-      expect do
-        log_sorter.print_unique_views
-      end.to output("two 777 unique views\nthree 666 unique views\none 555 unique views\n").to_stdout
-    end
+    expect(sorted_list[0][0]).to eq(:three)
+    expect(sorted_list[1][0]).to eq(:two)
+    expect(sorted_list[2][0]).to eq(:one)
+  end
+
+  it 'Handles a slightly more complex case' do
+    allow(visit_tracker1).to receive(:unique_count).and_return(555)
+    allow(visit_tracker2).to receive(:unique_count).and_return(777)
+    allow(visit_tracker3).to receive(:unique_count).and_return(666)
+
+    log_sorter = LogSorter.new({ one: visit_tracker1, two: visit_tracker2, three: visit_tracker3 })
+    sorted_list = log_sorter.unique_page_views_sorted
+
+    expect(sorted_list[0][0]).to eq(:two)
+    expect(sorted_list[1][0]).to eq(:three)
+    expect(sorted_list[2][0]).to eq(:one)
   end
 end

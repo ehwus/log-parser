@@ -2,10 +2,13 @@
 
 require 'visit_tracker'
 require 'log_sorter'
+require 'log_printer'
 
 class LogParser
   def initialize(file_name)
     @pages_with_logs = {}
+    @sorted_all = []
+    @sorted_unique = []
     @file = File.expand_path("../../#{file_name}", __FILE__)
     return if file_exists?
 
@@ -28,10 +31,15 @@ class LogParser
     end
   end
 
-  def print_results
+  def sort
     log_sorter = LogSorter.new(@pages_with_logs)
-    log_sorter.print_views
-    log_sorter.print_unique_views
+    @sorted_all += log_sorter.all_page_views_sorted
+    @sorted_unique += log_sorter.unique_page_views_sorted
+  end
+
+  def print_results
+    LogPrinter.print_all_views(@sorted_all)
+    LogPrinter.print_unique_views(@sorted_unique)
   end
 
   private

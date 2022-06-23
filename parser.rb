@@ -7,6 +7,7 @@ require 'log_parser'
 def main
   parser = LogParser.new(ARGV[0])
   parser.parse
+  parser.sort
   parser.print_results
 end
 
